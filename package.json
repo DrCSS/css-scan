@@ -1,0 +1,26 @@
+{
+  "name": "drcss-exam",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": "./bin/entry.js",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "coffee-script": "~1.8.0",
+    "gulp": "~3.8.10",
+    "gulp-coffee": "~2.2.0",
+    "gulp-plumber": "~0.6.6",
+    "gulp-util": "~3.0.2",
+    "gulp-header": "~1.2.2",
+    "chai": "~1.10.0",
+    "mocha": "~2.1.0",
+    "debug": "~2.1.1"
+  },
+  "dependencies": {
+    "lazy.js": "~0.4.0"
+  }
+}
