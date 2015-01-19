@@ -2,11 +2,10 @@
   "name": "css-scan",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/css-scan.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bin": "./bin/entry.js",
   "author": "",
   "license": "ISC",
   "devDependencies": {
