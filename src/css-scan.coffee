@@ -1,9 +1,11 @@
+Lazy = require('lazy.js')
 inspectors = require('inspectors')
+wrapArray = require('utils/wrap-array')
 
 module.exports =
   inspect: (doc, finished) ->
     fi = setInterval ->
-      sheets = toArray(document.styleSheets)
+      sheets = wrapArray(document.styleSheets)
       isRulesLoaded = sheets.every (sheet) -> sheet.cssRules
 
       if isRulesLoaded
@@ -12,7 +14,7 @@ module.exports =
 
         result = {}
 
-        inspectors.forEach (inspector, name) ->
+        Lazy(inspectors).each (inspector, name) ->
           result[name] = inspector.inspect(document)
 
         finished(result)

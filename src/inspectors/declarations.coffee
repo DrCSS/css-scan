@@ -1,6 +1,7 @@
 Lazy = require('lazy.js')
+wrapArray = require('utils/wrap-array')
 
-gerRules = (groupingRule) ->
+getRules = (groupingRule) ->
   # CSSStyleSheet や GroupingRule (At-Rules) に内包されているルールを取得
   rules = groupingRule.pluck('cssRules').map(wrapArray).flatten()
 

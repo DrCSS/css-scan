@@ -5,7 +5,8 @@ module.exports = {
   entry: ['./src/css-scan'],
 
   output: {
-    filename: 'dist/css-scan.js'
+    filename: 'dist/css-scan.js',
+    library: 'CSSScan'
   },
 
   module: {

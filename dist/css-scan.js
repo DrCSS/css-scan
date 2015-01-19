@@ -1,3 +1,4 @@
+var CSSScan =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -51,16 +52,20 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var inspectors;
+	var Lazy, inspectors, wrapArray;
 
-	inspectors = __webpack_require__(11);
+	Lazy = __webpack_require__(6);
+
+	inspectors = __webpack_require__(2);
+
+	wrapArray = __webpack_require__(5);
 
 	module.exports = {
 	  inspect: function(doc, finished) {
 	    var fi;
 	    return fi = setInterval(function() {
 	      var isRulesLoaded, result, sheets;
-	      sheets = toArray(document.styleSheets);
+	      sheets = wrapArray(document.styleSheets);
 	      isRulesLoaded = sheets.every(function(sheet) {
 	        return sheet.cssRules;
 	      });
@@ -68,7 +73,7 @@
 	        console.log("==== Loaded StyleSheet#cssRules");
 	        clearInterval(fi);
 	        result = {};
-	        inspectors.forEach(function(inspector, name) {
+	        Lazy(inspectors).each(function(inspector, name) {
 	          return result[name] = inspector.inspect(document);
 	        });
 	        return finished(result);
@@ -79,57 +84,26 @@
 
 
 /***/ },
-/* 2 */,
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = {
+	  declarations: __webpack_require__(3),
+	  propertyValueCount: __webpack_require__(4)
+	};
+
+
+/***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = function(arrayLikeObject) {
-	  return Array.prototype.slice.call(arrayLikeObject);
-	};
+	var Lazy, getRules, wrapArray;
 
+	Lazy = __webpack_require__(6);
 
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
+	wrapArray = __webpack_require__(5);
 
-	var getDeclarations, wrapArray;
-
-	wrapArray = __webpack_require__(3);
-
-	getDeclarations = __webpack_require__(6);
-
-	module.exports = {
-	  inspect: function(doc) {
-	    var declarations, propertyValueCounts;
-	    declarations = getDeclarations(doc);
-	    propertyValueCounts = declarations.groupBy('property').map(function(props, prop) {
-	      var values;
-	      values = Lazy(props).pluck('value').uniq().toArray();
-	      return {
-	        property: prop,
-	        valueCount: values.length
-	      };
-	    }).sortBy('valueCount');
-	    console.log('rules.size', rules.size());
-	    console.log('plainStyles.size', plainStyles.size());
-	    console.log('atRuleStyles.size', atRuleStyles.size());
-	    console.log('styles.size', styles.size());
-	    console.log('propertyValueCounts.size', propertyValueCounts.size());
-	    return propertyValueCounts.toArray();
-	  }
-	};
-
-
-/***/ },
-/* 5 */,
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Lazy, gerRules;
-
-	Lazy = __webpack_require__(7);
-
-	gerRules = function(groupingRule) {
+	getRules = function(groupingRule) {
 	  var importSheets, rules;
 	  rules = groupingRule.pluck('cssRules').map(wrapArray).flatten();
 	  importSheets = rules.pluck('styleSheet').compact();
@@ -164,7 +138,48 @@
 
 
 /***/ },
-/* 7 */
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var getDeclarations, wrapArray;
+
+	wrapArray = __webpack_require__(5);
+
+	getDeclarations = __webpack_require__(3);
+
+	module.exports = {
+	  inspect: function(doc) {
+	    var declarations, propertyValueCounts;
+	    declarations = getDeclarations(doc);
+	    propertyValueCounts = declarations.groupBy('property').map(function(props, prop) {
+	      var values;
+	      values = Lazy(props).pluck('value').uniq().toArray();
+	      return {
+	        property: prop,
+	        valueCount: values.length
+	      };
+	    }).sortBy('valueCount');
+	    console.log('rules.size', rules.size());
+	    console.log('plainStyles.size', plainStyles.size());
+	    console.log('atRuleStyles.size', atRuleStyles.size());
+	    console.log('styles.size', styles.size());
+	    console.log('propertyValueCounts.size', propertyValueCounts.size());
+	    return propertyValueCounts.toArray();
+	  }
+	};
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(arrayLikeObject) {
+	  return Array.prototype.slice.call(arrayLikeObject);
+	};
+
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate, module) {/*
@@ -6507,13 +6522,13 @@
 
 	}(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8).setImmediate, __webpack_require__(8).clearImmediate, __webpack_require__(9)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7).setImmediate, __webpack_require__(7).clearImmediate, __webpack_require__(8)(module)))
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var nextTick = __webpack_require__(10).nextTick;
+	var nextTick = __webpack_require__(9).nextTick;
 	var slice = Array.prototype.slice;
 	var immediateIds = {};
 	var nextImmediateId = 0;
@@ -6569,7 +6584,7 @@
 	};
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(module) {
@@ -6585,7 +6600,7 @@
 
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// shim for using process in browser
@@ -6645,16 +6660,6 @@
 	    throw new Error('process.chdir is not supported');
 	};
 	process.umask = function() { return 0; };
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = {
-	  declarations: __webpack_require__(6),
-	  propertyValueCount: __webpack_require__(4)
-	};
 
 
 /***/ }
