@@ -1,24 +1,20 @@
 gulp = require('gulp')
-coffee = require('gulp-coffee')
 gutil = require('gulp-util')
 plumber = require('gulp-plumber')
-header = require('gulp-header')
+webpack = require('gulp-webpack')
+
+require('coffee-script/register')
 
 errorLog = (err) ->
   console.log(err.code)
 
-gulp.task 'default', ['coffee', 'header']
+gulp.task 'default', ['webpack']
 
-gulp.task 'coffee', ->
+gulp.task 'webpack', ->
   gulp.src('src/**/*.coffee')
     .pipe(plumber())
-    .pipe(coffee(bare: true))
-    .pipe(gulp.dest('./'))
-
-gulp.task 'header', ['coffee'], ->
-  gulp.src('bin/entry.js')
-    .pipe(header("#!/usr/bin/env node\n"))
-    .pipe(gulp.dest('./bin/'))
+    .pipe(webpack(require('./webpack.config')))
+    .pipe(gulp.dest('./dist/'))
 
 gulp.task 'watch', ->
-  gulp.watch 'src/**/*.coffee', ['coffee', 'header']
+  gulp.watch 'src/**/*.coffee', ['webpack']
