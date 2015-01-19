@@ -1,9 +1,9 @@
 wrapArray = require('utils/wrap-array')
-getDeclarations = require('inspectors/declarations')
+declarations = require('inspectors/declarations')
 
 module.exports =
   inspect: (doc) ->
-    declarations = getDeclarations(doc)
+    declarations = declarations.inspect(doc)
 
     propertyValueCounts =
       declarations
