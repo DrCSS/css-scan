@@ -6514,11 +6514,6 @@ var CSSScan =
 	        valueCount: values.length
 	      };
 	    }).sortBy('valueCount');
-	    console.log('rules.size', rules.size());
-	    console.log('plainStyles.size', plainStyles.size());
-	    console.log('atRuleStyles.size', atRuleStyles.size());
-	    console.log('styles.size', styles.size());
-	    console.log('propertyValueCounts.size', propertyValueCounts.size());
 	    return propertyValueCounts.toArray();
 	  }
 	};
