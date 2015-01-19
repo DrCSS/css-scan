@@ -54,11 +54,11 @@ var CSSScan =
 
 	var Lazy, inspectors, wrapArray;
 
-	Lazy = __webpack_require__(6);
+	Lazy = __webpack_require__(4);
 
 	inspectors = __webpack_require__(2);
 
-	wrapArray = __webpack_require__(5);
+	wrapArray = __webpack_require__(3);
 
 	module.exports = {
 	  inspect: function(doc, finished) {
@@ -88,89 +88,13 @@ var CSSScan =
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	  declarations: __webpack_require__(3),
-	  propertyValueCount: __webpack_require__(4)
+	  declarations: __webpack_require__(5),
+	  propertyValueCount: __webpack_require__(6)
 	};
 
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Lazy, getRules, wrapArray;
-
-	Lazy = __webpack_require__(6);
-
-	wrapArray = __webpack_require__(5);
-
-	getRules = function(groupingRule) {
-	  var importSheets, rules;
-	  rules = groupingRule.pluck('cssRules').map(wrapArray).flatten();
-	  importSheets = rules.pluck('styleSheet').compact();
-	  if (importSheets.size() > 0) {
-	    return rules.concat(getRules(importSheets));
-	  }
-	  return rules;
-	};
-
-	module.exports = {
-	  inspect: function(doc) {
-	    var atRuleStyles, declarations, plainStyles, rules, styleSheets, styles;
-	    styleSheets = Lazy(wrapArray(doc.styleSheets));
-	    console.log('styleSheets', styleSheets.toArray());
-	    rules = getRules(styleSheets);
-	    plainStyles = rules.pluck('style');
-	    atRuleStyles = getRules(rules).pluck('style');
-	    styles = plainStyles.concat(atRuleStyles).compact();
-	    declarations = styles.map(function(style) {
-	      var props;
-	      props = wrapArray(style);
-	      return Lazy(props).map(function(p) {
-	        return {
-	          property: p,
-	          value: style[p]
-	        };
-	      }).toArray();
-	    }).flatten();
-	    return declarations;
-	  }
-	};
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var getDeclarations, wrapArray;
-
-	wrapArray = __webpack_require__(5);
-
-	getDeclarations = __webpack_require__(3);
-
-	module.exports = {
-	  inspect: function(doc) {
-	    var declarations, propertyValueCounts;
-	    declarations = getDeclarations(doc);
-	    propertyValueCounts = declarations.groupBy('property').map(function(props, prop) {
-	      var values;
-	      values = Lazy(props).pluck('value').uniq().toArray();
-	      return {
-	        property: prop,
-	        valueCount: values.length
-	      };
-	    }).sortBy('valueCount');
-	    console.log('rules.size', rules.size());
-	    console.log('plainStyles.size', plainStyles.size());
-	    console.log('atRuleStyles.size', atRuleStyles.size());
-	    console.log('styles.size', styles.size());
-	    console.log('propertyValueCounts.size', propertyValueCounts.size());
-	    return propertyValueCounts.toArray();
-	  }
-	};
-
-
-/***/ },
-/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(arrayLikeObject) {
@@ -179,7 +103,7 @@ var CSSScan =
 
 
 /***/ },
-/* 6 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate, module) {/*
@@ -6523,6 +6447,82 @@ var CSSScan =
 	}(this));
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7).setImmediate, __webpack_require__(7).clearImmediate, __webpack_require__(8)(module)))
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Lazy, getRules, wrapArray;
+
+	Lazy = __webpack_require__(4);
+
+	wrapArray = __webpack_require__(3);
+
+	getRules = function(groupingRule) {
+	  var importSheets, rules;
+	  rules = groupingRule.pluck('cssRules').map(wrapArray).flatten();
+	  importSheets = rules.pluck('styleSheet').compact();
+	  if (importSheets.size() > 0) {
+	    return rules.concat(getRules(importSheets));
+	  }
+	  return rules;
+	};
+
+	module.exports = {
+	  inspect: function(doc) {
+	    var atRuleStyles, declarations, plainStyles, rules, styleSheets, styles;
+	    styleSheets = Lazy(wrapArray(doc.styleSheets));
+	    console.log('styleSheets', styleSheets.toArray());
+	    rules = getRules(styleSheets);
+	    plainStyles = rules.pluck('style');
+	    atRuleStyles = getRules(rules).pluck('style');
+	    styles = plainStyles.concat(atRuleStyles).compact();
+	    declarations = styles.map(function(style) {
+	      var props;
+	      props = wrapArray(style);
+	      return Lazy(props).map(function(p) {
+	        return {
+	          property: p,
+	          value: style[p]
+	        };
+	      }).toArray();
+	    }).flatten();
+	    return declarations;
+	  }
+	};
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var declarations, wrapArray;
+
+	wrapArray = __webpack_require__(3);
+
+	declarations = __webpack_require__(5);
+
+	module.exports = {
+	  inspect: function(doc) {
+	    var propertyValueCounts;
+	    declarations = declarations.inspect(doc);
+	    propertyValueCounts = declarations.groupBy('property').map(function(props, prop) {
+	      var values;
+	      values = Lazy(props).pluck('value').uniq().toArray();
+	      return {
+	        property: prop,
+	        valueCount: values.length
+	      };
+	    }).sortBy('valueCount');
+	    console.log('rules.size', rules.size());
+	    console.log('plainStyles.size', plainStyles.size());
+	    console.log('atRuleStyles.size', atRuleStyles.size());
+	    console.log('styles.size', styles.size());
+	    console.log('propertyValueCounts.size', propertyValueCounts.size());
+	    return propertyValueCounts.toArray();
+	  }
+	};
+
 
 /***/ },
 /* 7 */
